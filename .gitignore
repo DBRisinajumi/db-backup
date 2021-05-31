@@ -1,4 +1,4 @@
-latest/**
-daily/**
-weekly/**
-monthly/**
+runtime/*/latest/*
+runtime/*/daily/*
+runtime/*/weekly/*
+runtime/*/monthly/*
