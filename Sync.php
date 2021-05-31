@@ -73,7 +73,7 @@ class Sync extends Backup
                 break;
             default:
                 // Requires sshpass to be installed on local server
-                $command = "sshpass -p '" . $this->password . "' scp -r -v " .  $this->getLocalPath() . ' ' . $this->getUserAndHost() . ':' . $this->getRemotePath();
+                $command = "sshpass -p '" . $this->password . "' scp -r -vvv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " .  $this->getLocalPath() . ' ' . $this->getUserAndHost() . ':' . $this->getRemotePath();
         }
     
         return $command;
