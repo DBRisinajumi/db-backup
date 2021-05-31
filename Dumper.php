@@ -58,7 +58,7 @@ class Dumper extends Backup
     {        
         return self::DUMPER_MYDUMPER === $this->dumperApp
             ? dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval()
-            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . date('d.m.Y-H:i'). '.sql';       
+            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . date('d.m.Y-H-i'). '.sql';       
     }
         
     /**
