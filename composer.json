@@ -1,0 +1,13 @@
+{
+    "name": "DBRisinajumi/DbBackup",
+    "description": "Sheduled MySQL database backups",
+    "keywords": ["MySQL", "backup"],
+    "type": "library",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "Lauris Mierkalns",
+            "email": "latpages@gmail.com"
+        }
+    ]
+}
