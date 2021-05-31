@@ -20,11 +20,6 @@ class Dumper extends Backup
     public const DUMPER_MYSQLDUMP = 'mysqldump';
     public const DUMPER_MYDUMPER = 'mydumper';
     
-    public const INTERVAL_LATEST = 'latest';
-    public const INTERVAL_DAILY = 'daily';
-    public const INTERVAL_WEEKLY = 'weekly';
-    public const INTERVAL_MONTHLY = 'monthly';
-    
     /**
      * @throws \Exception
      */
@@ -76,7 +71,7 @@ class Dumper extends Backup
      */
     public function getLogPath(): string
     {
-        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/' . $this->dbEngine . '/log/' . $this->getInterval() . '.log';
+        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/log/' . $this->dumperApp . '-' . $this->getInterval() . '.log';
     }
     
     /**
@@ -102,7 +97,8 @@ class Dumper extends Backup
      * @return string
      */
     public function getCronCommand(): string
-    {
-        return '20 00 * * * www-data ' . $this->getCronPath() . " -i '" . $this->getInterval() . "'  > " . $this->getLogPath();
+    {        
+        $interval = $this->getInterval();
+        return $this->getCronTimerDef($interval) . ' www-data /usr/bin/php ' . $this->getCronPath() . " -i '" . $this->getInterval() . "'  > " . $this->getLogPath();
     }
 }

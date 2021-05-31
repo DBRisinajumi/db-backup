@@ -35,6 +35,8 @@ class Sync extends Backup
         echo '[Local Path] ' . $this->getLocalPath() . PHP_EOL;
         echo '[Remote Path] ' . $this->getRemotePath() . PHP_EOL;
         echo '[Exec] ' . $this->getExecCommand() . PHP_EOL;
+        echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
+        echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;
     }
     
     /**
@@ -73,7 +75,10 @@ class Sync extends Backup
                 break;
             default:
                 // Requires sshpass to be installed on local server
-                $command = "sshpass -p '" . $this->password . "' scp -r -vvv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " .  $this->getLocalPath() . ' ' . $this->getUserAndHost() . ':' . $this->getRemotePath();
+                $command = "sshpass -p '" . $this->password . "' scp -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " .  $this->getLocalPath() . ' ' . $this->getUserAndHost() . ':' . $this->getRemotePath();
+                if ($this->debug) {
+                    $command .= ' -vvv';
+                }
         }
     
         return $command;
@@ -100,7 +105,7 @@ class Sync extends Backup
      */
     public function getLogPath(): string
     {
-        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/backup/' . $this->getClientName() . '-upload.log';
+        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/backup/log/' . $this->getClientName() . '-upload-daily.log';
     }
     
     /**
@@ -127,5 +132,14 @@ class Sync extends Backup
     {
         // Remote home dir by default
         return $this->remotePath ?? '.';
+    }
+    
+    /**
+     * @param string $interval
+     * @return string
+     */
+    public function getCronCommand(): string
+    {
+        return $this->getCronTimerDef(self::INTERVAL_DAILY) . ' www-data /usr/bin/php ' . $this->getCronPath() . '  > ' . $this->getLogPath();
     }
 }

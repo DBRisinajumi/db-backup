@@ -13,6 +13,12 @@ class Backup
     protected $cronPath;
     protected $logPath;
     protected $dbEngine = self::DB_ENGINE_MYSQL;
+    protected $debug = false;
+    
+    public const INTERVAL_LATEST = 'latest';
+    public const INTERVAL_DAILY = 'daily';
+    public const INTERVAL_WEEKLY = 'weekly';
+    public const INTERVAL_MONTHLY = 'monthly';
     
     public const DB_ENGINE_MYSQL = 'mysql';
     
@@ -97,5 +103,29 @@ class Backup
     public function getCronPath(): string
     {
         return $this->cronPath ?? __FILE__;
-    }   
+    }
+    
+    /**
+     * @param string $interval
+     * @return string
+     */
+    public function getCronTimerDef(string $interval): string
+    {
+        $timeDef = '';
+        switch ($interval) {
+            case self::INTERVAL_WEEKLY:
+                // 04:00 every week at Monday
+                $timeDef = '0 4 * * 1';
+                break;
+            case self::INTERVAL_MONTHLY:
+                // 04:00 every month at the first day
+                $timeDef = '0 4 1 * *';
+                break;
+            default:
+                // Daily
+                $timeDef = '20 00 * * *';
+                break;
+        }
+        return $timeDef;
+    }
  }
