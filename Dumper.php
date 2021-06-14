@@ -1,12 +1,12 @@
 <?php
 
-namespace DBRisinajumi\DbBackup;
+namespace DbBackup;
 
 use Exception;
 
 /**
  * Class Dumper
- * @package DBRisinajumi\DbBackup
+ * @package DbBackup
  */
 class Dumper extends Backup
 {
@@ -16,7 +16,7 @@ class Dumper extends Backup
     protected $dbUser;
     protected $dbPassword;
     protected $dbName;
-        
+    
     public const DUMPER_MYSQLDUMP = 'mysqldump';
     public const DUMPER_MYDUMPER = 'mydumper';
     
@@ -33,7 +33,7 @@ class Dumper extends Backup
     }*/
     
     /**
-     * 
+     *
      */
     public function init(): void
     {
@@ -50,18 +50,18 @@ class Dumper extends Backup
      * @param string|null $path
      */
     public function getDumpFilePath(string $path = null): string
-    {        
+    {
         return self::DUMPER_MYDUMPER === $this->dumperApp
             ? dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval()
-            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . date('d.m.Y-H-i'). '.sql';       
+            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . date('d.m.Y-H-i') . '.sql';
     }
-        
+    
     /**
      * @return string
      */
     public function getExecCommand(): string
     {
-        return self::DUMPER_MYDUMPER === $this->dumperApp 
+        return self::DUMPER_MYDUMPER === $this->dumperApp
             ? 'mydumper -u ' . $this->dbUser . ' -p ' . $this->dbPassword . ' -B ' . $this->dbName . '    -o ' . $this->getDumpFilePath() . ' -c -C -t 1 -r 5000'
             : 'mysqldump -u ' . $this->dbUser . ' -p' . $this->dbPassword . ' ' . $this->dbName . ' > ' . $this->getDumpFilePath();
     }
@@ -71,7 +71,7 @@ class Dumper extends Backup
      */
     public function getLogPath(): string
     {
-        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/log/' . $this->dumperApp . '-' . $this->getInterval() . '.log';
+        return $this->logPath ?? dirname(__FILE__, 1) . '/runtime/log/' . $this->dumperApp . '-' . $this->getInterval() . '.log';
     }
     
     /**
@@ -89,7 +89,7 @@ class Dumper extends Backup
     {
         global $argv;
         //var_dump($argv);
-        return $argv[1] ?? self::INTERVAL_LATEST;    
+        return $argv[1] ?? self::INTERVAL_LATEST;
     }
     
     /**
@@ -97,7 +97,7 @@ class Dumper extends Backup
      * @return string
      */
     public function getCronCommand(): string
-    {        
+    {
         $interval = $this->getInterval();
         return $this->getCronTimerDef($interval) . ' www-data /usr/bin/php ' . $this->getCronPath() . " -i '" . $this->getInterval() . "'  > " . $this->getLogPath();
     }

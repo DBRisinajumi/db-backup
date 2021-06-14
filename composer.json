@@ -7,7 +7,15 @@
     "authors": [
         {
             "name": "Lauris Mierkalns",
-            "email": "latpages@gmail.com"
+            "email": "lauris@weberp.lv"
         }
-    ]
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+      "psr-4": {
+        "DbBackup\\": ""
+      }
+    }
 }

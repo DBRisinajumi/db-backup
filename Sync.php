@@ -1,6 +1,6 @@
 <?php
 
-namespace DBRisinajumi\DbBackup;
+namespace DbBackup;
 
 use Exception;
 
@@ -8,7 +8,7 @@ use Exception;
  * Class Sync
  * Upload files to remote server via scp, rsync or rclone
  * Uses scp by default
- * @package DBRisinajumi\DbBackup
+ * @package DbBackup
  */
 class Sync extends Backup
 {

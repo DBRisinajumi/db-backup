@@ -1,12 +1,12 @@
 <?php
 
-namespace DBRisinajumi\DbBackup;
+namespace DbBackup;
 
 use Exception;
 
 /**
  * Class Backup
- * @package DBRisinajumi\DbBackup
+ * @package DbBackup
  */
 class Backup
 {
@@ -33,44 +33,45 @@ class Backup
     }
     
     /**
-     * 
+     *
      */
     public function init()
-    {}
+    {
+    }
     
     /**
      * @throws \Exception
      */
-    public function setAuthFromEnv(?string $envPath = null, array $vars): void
+    public function setAuthFromEnv(array $vars = [], ?string $envPath = null): void
     {
-        if (!$envPath) { 
+        if (!$envPath) {
             $envPath = dirname(__DIR__, 2) . '/app_env/.env';
         }
-    
+        
         if (!file_exists($envPath) || !is_readable($envPath)) {
             throw new Exception('Env file not exists or not readable: ' . $envPath);
         }
         
         \Dotenv::load($envPath);
-
-        foreach ($vars as $property => $const) {
-            if (is_array($const) && isset($const['required'])) {
-                \Dotenv::required($const);
-                $this->{$property} = $const;
+        
+        foreach ($vars as $property) {
+            if (is_array($property) && in_array($property['required'])) {
+                \Dotenv::required($property);
+                $this->{$property} = getenv($property);
             }
         }
     }
-        
+    
     /**
      * @param array $vars
      */
     public function initClassVars(array $vars): void
     {
         foreach ($vars as $property => $const) {
-            $this->{$property} = $const;    
-        }    
+            $this->{$property} = $const;
+        }
     }
-            
+    
     /**
      * @return false|string|null
      */
@@ -94,7 +95,7 @@ class Backup
      */
     public function getLogPath(): string
     {
-        return $this->logPath ??  dirname(__FILE__, 1) . '/runtime/log';
+        return $this->logPath ?? dirname(__FILE__, 1) . '/runtime/log';
     }
     
     /**
@@ -128,4 +129,4 @@ class Backup
         }
         return $timeDef;
     }
- }
+}
