@@ -1,5 +1,5 @@
 {
-    "name": "DBRisinajumi/DbBackup",
+    "name": "dbrisinajumi/dbbackup",
     "description": "Sheduled MySQL database backups",
     "keywords": ["MySQL", "backup"],
     "type": "library",
