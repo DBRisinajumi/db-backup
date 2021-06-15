@@ -48,7 +48,7 @@ class Sync extends Backup
         echo '[Backup Host] ' . $this->getHost() . PHP_EOL;
         echo '[Local Path] ' . $this->getLocalPath() . PHP_EOL;
         echo '[Remote Path] ' . $this->getRemotePath() . PHP_EOL;
-        //echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
+        echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
         echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;
     
         return parent::run();
