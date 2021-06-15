@@ -21,29 +21,31 @@ class Dumper extends Backup
     public const DUMPER_MYDUMPER = 'mydumper';
     
     /**
+     * @param array $vars
+     * @param string|null $envPath
      * @throws \Exception
      */
-    /*public function initFromEnv(?string $envPath = null, array $vars): void
+    public function setAuthFromEnv(array $vars = [], ?string $envPath = null): void
     {
-        $this->dbUser = DB_ENV_MYSQL_USER;
-        $this->dbPassword = DB_ENV_MYSQL_PASSWORD;
-        $this->dbName = DB_ENV_MYSQL_DATABASE;
-        $this->dbPort = DB_PORT_3306_TCP_PORT;
-        $this->dbHost = DB_PORT_3306_TCP_ADDR;        
-    }*/
+        $vars = [
+            'dbName' => 'DB_ENV_MYSQL_DATABASE',
+            'dbUser' => 'DB_ENV_MYSQL_USER',
+            'dbPassword' => 'DB_ENV_MYSQL_PASSWORD',
+        ];
+        parent::setAuthFromEnv($vars);
+    }
     
-    /**
-     *
-     */
-    public function init(): void
+    public function run()
     {
         echo 'Running DB Dumper....' . PHP_EOL;
         echo '[Dumper App] ' . $this->dumperApp . PHP_EOL;
+        echo '[Interval] ' . $this->getInterval() . PHP_EOL;
         echo '[Database] ' . $this->dbName . PHP_EOL;
         echo '[Dump Path] ' . $this->getDumpFilePath() . PHP_EOL;
-        echo '[Exec] ' . $this->getExecCommand() . PHP_EOL;
         echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
-        echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;
+        echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;    
+    
+        return parent::run();
     }
     
     /**
@@ -77,28 +79,23 @@ class Dumper extends Backup
     /**
      * @return string
      */
-    public function getCronPath(): string
+   /* public function getCronPath(): string
     {
         return $this->cronPath ?? __FILE__;
-    }
+    }*/
     
-    /**
-     * @return string|null
-     */
-    public function getInterval(): ?string
-    {
-        global $argv;
-        //var_dump($argv);
-        return $argv[1] ?? self::INTERVAL_LATEST;
-    }
     
     /**
      * @param string $interval
      * @return string
      */
-    public function getCronCommand(): string
+    public function getCronCommand(): ?string
     {
+        if (!$this->cronPath) {
+            echo 'Cron path not set';
+            return null;
+        }
         $interval = $this->getInterval();
-        return $this->getCronTimerDef($interval) . ' www-data /usr/bin/php ' . $this->getCronPath() . " -i '" . $this->getInterval() . "'  > " . $this->getLogPath();
+        return $this->getCronTimerDef($interval) . ' www-data /usr/bin/php ' . $this->getCronPath() . ' >> ' . $this->getLogPath() . ' 2>&1';
     }
 }

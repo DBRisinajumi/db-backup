@@ -14,6 +14,7 @@ class Backup
     protected $logPath;
     protected $dbEngine = self::DB_ENGINE_MYSQL;
     protected $debug = false;
+    protected $interval = self::INTERVAL_LATEST;
     
     public const INTERVAL_LATEST = 'latest';
     public const INTERVAL_DAILY = 'daily';
@@ -25,6 +26,7 @@ class Backup
     /**
      * Backup constructor.
      * @param array $vars
+     * @param bool $fromEnv
      */
     public function __construct(array $vars = [])
     {
@@ -45,7 +47,7 @@ class Backup
     public function setAuthFromEnv(array $vars = [], ?string $envPath = null): void
     {
         if (!$envPath) {
-            $envPath = dirname(__DIR__, 2) . '/app_env/.env';
+            $envPath = dirname(__DIR__, 3) . '/app_env/';
         }
         
         if (!file_exists($envPath) || !is_readable($envPath)) {
@@ -54,11 +56,9 @@ class Backup
         
         \Dotenv::load($envPath);
         
-        foreach ($vars as $property) {
-            if (is_array($property) && in_array($property['required'])) {
-                \Dotenv::required($property);
-                $this->{$property} = getenv($property);
-            }
+        foreach ($vars as $property => $const) {
+            $value = getenv($const);
+            $this->{$property} = $value;
         }
     }
     
@@ -78,8 +78,8 @@ class Backup
     public function run()
     {
         $command = $this->getExecCommand();
-        echo $command;
-        return shell_exec($command);
+        echo '[EXEC] ' . $command . PHP_EOL;
+        return shell_exec($command) . PHP_EOL;
     }
     
     /**
@@ -103,7 +103,15 @@ class Backup
      */
     public function getCronPath(): string
     {
-        return $this->cronPath ?? __FILE__;
+        return $this->cronPath;
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getInterval(): ?string
+    {
+        return $this->interval ?? self::INTERVAL_LATEST;
     }
     
     /**
@@ -123,8 +131,8 @@ class Backup
                 $timeDef = '0 4 1 * *';
                 break;
             default:
-                // Daily
-                $timeDef = '20 00 * * *';
+                // 04:00 Daily
+                $timeDef = '0 4 * * *';
                 break;
         }
         return $timeDef;

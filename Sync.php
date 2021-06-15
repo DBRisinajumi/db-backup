@@ -24,19 +24,34 @@ class Sync extends Backup
     public const SYNC_ENGINE_RSYNC = 'rsync';
     public const SYNC_ENGINE_RCLONE = 'rclone';
     public const SYNC_ENGINE_SCP = 'scp';
-    
+
     /**
-     * 
+     * @param array $vars
+     * @param string|null $envPath
+     * @throws \Exception
      */
-    public function init(): void
+    public function setAuthFromEnv(array $vars = [], ?string $envPath = null): void
+    {
+        $vars = [
+            'host' => 'BACKUP_SERVER_HOST',
+            'user' => 'BACKUP_SERVER_USERNAME',
+            'password' => 'BACKUP_SERVER_PASSWORD',
+            'remotePath' => 'BACKUP_SERVER_PATH',
+        ];
+        parent::setAuthFromEnv($vars);
+    }
+    
+    public function run()
     {
         echo 'Running ' . $this->syncEngine . '....' . PHP_EOL;
+        echo '[Interval] ' . $this->getInterval() . PHP_EOL;
         echo '[Backup Host] ' . $this->getHost() . PHP_EOL;
         echo '[Local Path] ' . $this->getLocalPath() . PHP_EOL;
         echo '[Remote Path] ' . $this->getRemotePath() . PHP_EOL;
-        echo '[Exec] ' . $this->getExecCommand() . PHP_EOL;
-        echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
+        //echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
         echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;
+    
+        return parent::run();
     }
     
     /**
@@ -113,17 +128,9 @@ class Sync extends Backup
      */
     public function getLocalPath(): string
     {
-        return $this->localPath ??  dirname(__FILE__, 1) . '/runtime/backup/' . $this->getBackupDirName();
+        return $this->localPath ??  dirname(__FILE__, 1) . '/runtime/backup/mysql';
     }
     
-    /**
-     * @return mixed|string
-     */
-    public function getBackupDirName()
-    {
-        global $argv;
-        return $argv[1] ?? 'mysql';
-    }
     
     /**
      * @return string
@@ -140,6 +147,6 @@ class Sync extends Backup
      */
     public function getCronCommand(): string
     {
-        return $this->getCronTimerDef(self::INTERVAL_DAILY) . ' www-data /usr/bin/php ' . $this->getCronPath() . '  > ' . $this->getLogPath();
+        return $this->getCronTimerDef($this->getI) . ' www-data /usr/bin/php ' . $this->getCronPath() . '  > ' . $this->getLogPath();
     }
 }
