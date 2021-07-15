@@ -16,9 +16,13 @@ class Dumper extends Backup
     protected $dbUser;
     protected $dbPassword;
     protected $dbName;
+    protected $dumpFileName = self::FILE_NAME_FULL;
     
     public const DUMPER_MYSQLDUMP = 'mysqldump';
     public const DUMPER_MYDUMPER = 'mydumper';
+    
+    public const FILE_NAME_FULL = 'full';
+    public const FILE_NAME_WEEKDAY_NUMBER = 'weekday-number';
     
     /**
      * @param array $vars
@@ -31,6 +35,7 @@ class Dumper extends Backup
             'dbName' => 'DB_ENV_MYSQL_DATABASE',
             'dbUser' => 'DB_ENV_MYSQL_USER',
             'dbPassword' => 'DB_ENV_MYSQL_PASSWORD',
+            'dumpFileName' => 'BACKUP_DUMP_FILE_NAME_FORMAT',
         ];
         parent::setAuthFromEnv($vars);
     }
@@ -49,13 +54,29 @@ class Dumper extends Backup
     }
     
     /**
+     * @return string
+     */
+    public function getDumpFilename(): string
+    {
+        switch ($this->dumpFileName) {
+            case self::FILE_NAME_WEEKDAY_NUMBER:
+                $date = new \DateTime();
+                $filename = $date->format('N') . '.sql';
+                break;
+            default:
+                $filename = date('d.m.Y-H-i') . '.sql';
+        }
+        return $filename;
+    }
+    
+    /**
      * @param string|null $path
      */
     public function getDumpFilePath(string $path = null): string
     {
         return self::DUMPER_MYDUMPER === $this->dumperApp
             ? dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval()
-            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . date('d.m.Y-H-i') . '.sql';
+            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . $this->getDumpFilename();
     }
     
     /**
