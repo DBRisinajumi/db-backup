@@ -123,16 +123,16 @@ class Backup
         $timeDef = '';
         switch ($interval) {
             case self::INTERVAL_WEEKLY:
-                // 04:00 every week at Monday
-                $timeDef = '0 4 * * 1';
+                // 04:10 every week at Monday
+                $timeDef = '10 4 * * 1';
                 break;
             case self::INTERVAL_MONTHLY:
-                // 04:00 every month at the first day
-                $timeDef = '0 4 1 * *';
+                // 04:10 every month at the first day
+                $timeDef = '10 4 1 * *';
                 break;
             default:
-                // 04:00 Daily
-                $timeDef = '0 4 * * *';
+                // 04:10 Daily
+                $timeDef = '10 4 * * *';
                 break;
         }
         return $timeDef;

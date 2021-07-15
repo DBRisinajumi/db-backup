@@ -117,6 +117,6 @@ class Dumper extends Backup
             return null;
         }
         $interval = $this->getInterval();
-        return $this->getCronTimerDef($interval) . ' www-data /usr/bin/php ' . $this->getCronPath() . ' >> ' . $this->getLogPath() . ' 2>&1';
+        return $this->getCronTimerDef($interval) . ' /usr/bin/php ' . $this->getCronPath() . ' >> ' . $this->getLogPath() . ' 2>&1';
     }
 }

@@ -147,6 +147,6 @@ class Sync extends Backup
      */
     public function getCronCommand(): string
     {
-        return $this->getCronTimerDef($this->getInterval()) . ' www-data /usr/bin/php ' . $this->getCronPath() . ' >> ' . $this->getLogPath() . ' 2>&1';
+        return $this->getCronTimerDef($this->getInterval()) . ' /usr/bin/php ' . $this->getCronPath() . ' >> ' . $this->getLogPath() . ' 2>&1';
     }
 }
