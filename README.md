@@ -37,7 +37,7 @@ Add the controller to config/console.php
 ```
 Example cron command
 ```php
-0 4 * * *  /usr/bin/php [SITE PATH]/yii backup/dump -i=daily >> [SITE PATH]/vendor/dbrisinajumi/dbbackup/runtime/log/mysqldump-daily.log 2>&1
+0 4 * * *  /usr/bin/php [SITE PATH]/yii backup/dump -i=daily >> [SITE PATH]/vendor/dbrisinajumi/dbbackup/runtime/log/db-dump-daily.log 2>&1
 ```
 
 ### Usage via custom script
@@ -91,7 +91,7 @@ Add the controller to config/console.php
 
 Example cron command
 ```php
-0 4 * * *  /usr/bin/php [SITE PATH]/yii backup/sync -i=daily >> [SITE PATH]/vendor/dbrisinajumi/dbbackup/runtime/log/mysqldump-daily.log 2>&1
+0 4 * * *  /usr/bin/php [SITE PATH]/yii backup/sync -i=daily >> [SITE PATH]/vendor/dbrisinajumi/dbbackup/runtime/log/backup-sync-daily.log 2>&1
 ```
 
 ### Usage via custom script

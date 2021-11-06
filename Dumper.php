@@ -87,7 +87,8 @@ class Dumper extends Backup
     {
         return self::DUMPER_MYDUMPER === $this->dumperApp
             //TODO - add option for app params e.g. -c -C -t 1 -r 5000
-            ? '/usr/bin/mydumper -u ' . $this->dbUser . ' -p ' . $this->dbPassword . ' -B ' . $this->dbName . ' -o ' . $this->getDumpFilePath() . ' -c -C -t 1 -r 5000'
+            // default param --lock-all-tables to avoid " Access denied; you need (at least one of) the RELOAD privilege(s)" error.  See: https://coderedpanda.wordpress.com/2020/04/11/mydumper-taking-consistent-backups/
+            ? '/usr/bin/mydumper -u ' . $this->dbUser . ' -p ' . $this->dbPassword . ' -B ' . $this->dbName . ' -o ' . $this->getDumpFilePath() . ' -c -C -t 1 -r 5000 --lock-all-tables'
             : 'mysqldump -u ' . $this->dbUser . ' -p' . $this->dbPassword . ' ' . $this->dbName . ' > ' . $this->getDumpFilePath();
     }
     
