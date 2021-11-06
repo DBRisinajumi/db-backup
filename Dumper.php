@@ -36,6 +36,7 @@ class Dumper extends Backup
             'dbUser' => 'DB_ENV_MYSQL_USER',
             'dbPassword' => 'DB_ENV_MYSQL_PASSWORD',
             'dumpFileName' => 'BACKUP_DUMP_FILE_NAME_FORMAT',
+            'dumperApp' => 'BACKUP_DUMPER_APP'
         ];
         parent::setAuthFromEnv($vars);
     }
@@ -48,7 +49,7 @@ class Dumper extends Backup
         echo '[Database] ' . $this->dbName . PHP_EOL;
         echo '[Dump Path] ' . $this->getDumpFilePath() . PHP_EOL;
         echo '[Cron command] ' . $this->getCronCommand() . PHP_EOL;
-        echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;    
+        echo '[Cron Log Path] ' . $this->getLogPath() . PHP_EOL;
     
         return parent::run();
     }
@@ -85,7 +86,8 @@ class Dumper extends Backup
     public function getExecCommand(): string
     {
         return self::DUMPER_MYDUMPER === $this->dumperApp
-            ? 'mydumper -u ' . $this->dbUser . ' -p ' . $this->dbPassword . ' -B ' . $this->dbName . '    -o ' . $this->getDumpFilePath() . ' -c -C -t 1 -r 5000'
+            //TODO - add option for app params e.g. -c -C -t 1 -r 5000
+            ? '/usr/bin/mydumper -u ' . $this->dbUser . ' -p ' . $this->dbPassword . ' -B ' . $this->dbName . ' -o ' . $this->getDumpFilePath() . ' -c -C -t 1 -r 5000'
             : 'mysqldump -u ' . $this->dbUser . ' -p' . $this->dbPassword . ' ' . $this->dbName . ' > ' . $this->getDumpFilePath();
     }
     

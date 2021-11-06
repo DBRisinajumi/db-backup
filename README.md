@@ -24,6 +24,9 @@ DB_ENV_MYSQL_DATABASE=dbname
 DB_ENV_MYSQL_USER=dbname_php
 DB_ENV_MYSQL_PASSWORD=secret
 BACKUP_DUMP_FILE_NAME_FORMAT=weekday-number
+
+//Optional - set dumper engine to mydumper instead default mysqldump 
+BACKUP_DUMP_ENGINE=mydumper
 ```
 Add the controller to config/console.php
 ```php
