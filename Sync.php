@@ -43,7 +43,7 @@ class Sync extends Backup
     
     public function run()
     {
-        echo 'Running ' . $this->syncEngine . '....' . PHP_EOL;
+        echo 'Running ' . $this->syncEngine . ' ' . date('d.m.Y H:i') . PHP_EOL;
         echo '[Interval] ' . $this->getInterval() . PHP_EOL;
         echo '[Backup Host] ' . $this->getHost() . PHP_EOL;
         echo '[Local Path] ' . $this->getLocalPath() . PHP_EOL;

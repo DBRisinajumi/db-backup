@@ -43,7 +43,7 @@ class Dumper extends Backup
     
     public function run()
     {
-        echo 'Running DB Dumper....' . PHP_EOL;
+        echo 'Running DB Dumper: ' . date('d.m.Y H:i') . PHP_EOL;
         echo '[Dumper App] ' . $this->dumperApp . PHP_EOL;
         echo '[Interval] ' . $this->getInterval() . PHP_EOL;
         echo '[Database] ' . $this->dbName . PHP_EOL;
@@ -62,22 +62,25 @@ class Dumper extends Backup
         switch ($this->dumpFileName) {
             case self::FILE_NAME_WEEKDAY_NUMBER:
                 $date = new \DateTime();
-                $filename = $date->format('N') . '.sql';
+                
+                $filename = self::DUMPER_MYDUMPER === $this->dumperApp ? $date->format('N') . '/' : $date->format('N') . '.sql';
                 break;
             default:
-                $filename = date('d.m.Y-H-i') . '.sql';
+                $filename = self::DUMPER_MYDUMPER === $this->dumperApp ? date('d.m.Y-H-i') . '/' : date('d.m.Y-H-i') . '.sql';
         }
+        
+        
         return $filename;
     }
+    
+    
     
     /**
      * @param string|null $path
      */
     public function getDumpFilePath(string $path = null): string
     {
-        return self::DUMPER_MYDUMPER === $this->dumperApp
-            ? dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval()
-            : dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . $this->getDumpFilename();
+        return dirname(__FILE__, 1) . '/runtime/backup/' . $this->dbEngine . '/' . $this->getInterval() . '/' . $this->getDumpFilename();
     }
     
     /**
