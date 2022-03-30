@@ -1,0 +1,20 @@
+{
+    "name": "dbrisinajumi/dbbackup",
+    "description": "Sheduled MySQL database backups",
+    "keywords": ["MySQL", "backup"],
+    "type": "library",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "Lauris Mierkalns",
+            "email": "lauris@weberp.lv"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+      "psr-4": {
+        "DbBackup\\": ""
+      }
+    }
+}
