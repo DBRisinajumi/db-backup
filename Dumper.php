@@ -17,6 +17,7 @@ class Dumper extends Backup
     protected $dbPassword;
     protected $dbName;
     protected $dumpFileName = self::FILE_NAME_FULL;
+    protected $dumpSavePath;
     
     public const DUMPER_MYSQLDUMP = 'mysqldump';
     public const DUMPER_MYDUMPER = 'mydumper';
@@ -35,6 +36,7 @@ class Dumper extends Backup
             'dbName' => 'DB_ENV_MYSQL_DATABASE',
             'dbUser' => 'DB_ENV_MYSQL_USER',
             'dbPassword' => 'DB_ENV_MYSQL_PASSWORD',
+            'dumpSavePath' => 'BACKUP_DUMP_SAVE_PATH',
             'dumpFileName' => 'BACKUP_DUMP_FILE_NAME_FORMAT',
             'dumperApp' => 'BACKUP_DUMP_ENGINE'
         ];
@@ -92,7 +94,7 @@ class Dumper extends Backup
      */
     public function getDumpSavePath(string $path = null): string
     {
-        return $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/' . $this->dbEngine . '/' . $this->getInterval();
+        return $this->dumpSavePath ?? $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/' . $this->dbEngine . '/' . $this->getInterval();
     }
 
     public function getDumpFilePath(string $path = null): string
