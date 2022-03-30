@@ -36,6 +36,7 @@ class Sync extends Backup
             'host' => 'BACKUP_SERVER_HOST',
             'user' => 'BACKUP_SERVER_USERNAME',
             'password' => 'BACKUP_SERVER_PASSWORD',
+            'localPath' => 'BACKUP_DUMP_SAVE_PATH',
             'remotePath' => 'BACKUP_SERVER_PATH',
         ];
         parent::setAuthFromEnv($vars);
@@ -128,7 +129,7 @@ class Sync extends Backup
      */
     public function getLocalPath(): string
     {
-        return $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/mysql';
+        return $this->localPath ?? $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/mysql';
     }
     
     
