@@ -129,7 +129,8 @@ class Sync extends Backup
      */
     public function getLocalPath(): string
     {
-        return $this->localPath ?? $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/mysql';
+        $path = !empty($this->localPath) ? $this->localPath : $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/mysql';
+        return $path;
     }
     
     
