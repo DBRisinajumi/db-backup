@@ -94,7 +94,8 @@ class Dumper extends Backup
      */
     public function getDumpSavePath(string $path = null): string
     {
-        return $this->dumpSavePath ?? $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/' . $this->dbEngine . '/' . $this->getInterval();
+        $path = !empty($this->dumpSavePath) ? $this->dumpSavePath : $this->getRuntimePath() . '/' . self::BACKUP_DIR_NAME . '/' . $this->dbEngine . '/' . $this->getInterval();
+        return $path;
     }
 
     public function getDumpFilePath(string $path = null): string

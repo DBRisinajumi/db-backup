@@ -115,6 +115,7 @@ class Backup
      */
     public function getRuntimePath(): string
     {
+        $path = class_exists('Yii') ? \Yii::getAlias('@runtime') : $this->getRootPath() . '/runtime';
         return class_exists('Yii') ? \Yii::getAlias('@runtime') : $this->getRootPath() . '/runtime';
     }
     
